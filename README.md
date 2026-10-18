@@ -17,13 +17,14 @@
 
 Banyak masyarakat, khususnya **mahasiswa**, masih kesulitan mengelola uang. Uang saku atau pemasukan bulanan sering habis sebelum waktunya karena tidak dicatat, tidak dibagi sesuai kebutuhan, dan tidak ada uang yang disisihkan untuk tabungan maupun dana darurat. Masalah ini diperparah oleh **rendahnya literasi keuangan**, sehingga banyak orang belum mengenal cara dasar membagi pemasukan, membedakan kebutuhan dan keinginan, atau bahaya utang konsumtif dan pinjaman online ilegal.
 
-**MARIE** dibuat sebagai alat bantu sederhana untuk mengatasi masalah tersebut. Nama MARIE terinspirasi dari nama Menteri Keuangan kita, sebagai simbol pengelolaan keuangan yang tertata. Nama ini sekaligus singkatan dari empat fungsi utama program:
+**MARIE** dibuat sebagai alat bantu sederhana untuk mengatasi masalah tersebut. Nama MARIE terinspirasi dari nama Menteri Keuangan kita, sebagai simbol pengelolaan keuangan yang tertata. Nama ini sekaligus singkatan dari lima kata yang menggambarkan isi program:
 
 <div align="center">
 
 | | Huruf | Arti | Fungsi |
 |:-:|:-:|---|---|
-| 💸 | **M** | **Money Allocation** | Membagi uang ke beberapa *pocket* sesuai tujuan |
+| 💵 | **M** | **Money** | Uang pengguna sebagai pusat pengelolaan, mulai dari pemasukan sampai pengeluaran |
+| 💸 | **A** | **Allocation** | Membagi uang ke beberapa *pocket* sesuai tujuan |
 | 📏 | **R** | **Regulation** | Mengatur dan mencatat pemasukan serta pengeluaran |
 | 💡 | **I** | **Insight** | Memberi gambaran kondisi keuangan dan saran dari literatur keuangan |
 | 📊 | **E** | **Evaluation** | Menilai kesehatan keuangan dari perbandingan pemasukan dan pengeluaran |
