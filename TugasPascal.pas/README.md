@@ -1,8 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f766e,50:14b8a6,100:facc15&height=220&section=header&text=MARIE&fontSize=80&fontColor=ffffff&fontAlignY=38&desc=Money%20Allocation,%20Regulation,%20Insight%20%26%20Evaluation&descSize=18&descAlignY=58&animation=fadeIn" width="100%"/>
-
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3000&pause=800&color=14B8A6&center=true&vCenter=true&width=600&lines=Kelola+uangmu+dengan+lebih+teratur+%F0%9F%92%B0;Bagi+pemasukan+ke+pocket+%F0%9F%91%9B;Dapatkan+saran+keuangan+%F0%9F%93%8A" alt="Typing SVG"/>
+<img src="assets/header.svg" alt="MARIE" width="100%"/>
 
 <br/>
 
@@ -244,7 +242,9 @@ Program juga bisa dijalankan langsung dari VS Code atau Free Pascal IDE.
 📦 TugasPascal
  ┣ 📜 ProjekMARIE.pas   → source code program
  ┣ 📄 marie.txt         → penyimpanan data (dibuat otomatis)
- ┗ 📘 README.md         → dokumentasi repositori
+ ┣ 📘 README.md         → dokumentasi repositori
+ ┗ 📂 assets
+    ┗ 🖼️ header.svg     → banner animasi README
 ```
 
 ---
@@ -259,10 +259,10 @@ Program juga bisa dijalankan langsung dari VS Code atau Free Pascal IDE.
 > - Jangan mengedit `marie.txt` secara manual, karena urutan barisnya harus sesuai dengan yang dibaca program.
 > - Hapus `marie.txt` kalau ingin mengembalikan program ke kondisi awal, termasuk sandi kembali menjadi `1234`.
 
+---
+
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:facc15,50:14b8a6,100:0f766e&height=120&section=footer" width="100%"/>
-
-**Dibuat oleh Musketeers · KOM A**
+**Dibuat oleh ⚔️ Musketeers · KOM A**
 
 </div>
