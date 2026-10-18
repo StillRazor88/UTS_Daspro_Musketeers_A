@@ -1,22 +1,36 @@
 program marie_projeklab;
-uses crt, sysutils;
+uses crt, sysutils; // crt dipakai untuk clrscr (membersihkan layar), sedangkan sysutils menyediakan FileExists untuk mengecek apakah file tersedia.
 
 const
-  MAXPOCKET = 8;
+  MAXPOCKET = 8; // Konstanta adalah nilai tetap yang tidak berubah selama program berjalan.
 
 var
   username, sandi: string;
+
+  // ===== PENGELOLAAN POCKET =====
+  // Setiap pocket menyimpan tiga informasi: nama, saldo, dan persentase pembagian.
+  // Program ini tidak menggunakan array, jadi data setiap pocket disimpan dalam variabel terpisah, dari pocket 1 sampai 8.
+  // Misalnya, data pocket nomor 3 disimpan di nama3, saldo3, dan persen3.
   nama1, nama2, nama3, nama4, nama5, nama6, nama7, nama8: string;
   saldo1, saldo2, saldo3, saldo4, saldo5, saldo6, saldo7, saldo8: longint;
   persen1, persen2, persen3, persen4, persen5, persen6, persen7, persen8: integer;
+
+  // Variabel perantara digunakan untuk mengolah data satu pocket.
+  // p menyimpan nomor pocket yang sedang dipilih.
+  // namaSkrg, saldoSkrg, dan persenSkrg menyimpan salinan data pocket yang dipilih.
+  // Alurnya: tentukan p, ambil datanya, lakukan perubahan, lalu simpan kembali.
   p, persenSkrg: integer;
   namaSkrg: string;
   saldoSkrg: longint;
-  jumlahPocket, jumlahTransaksi: integer;
-  saldoBebas, totalMasuk, totalKeluar, nominal: longint;
-  menu, percobaan, i: integer;
-  berhasil, templateAda: boolean;
 
+  jumlahPocket, jumlahTransaksi: integer;
+  saldoBebas, totalMasuk, totalKeluar, nominal: longint; // saldoBebas = uang yang tidak masuk pocket manapun
+  menu, percobaan, i: integer;
+  berhasil, templateAda: boolean; // templateAda = apakah persen pembagian sudah diatur
+
+// ambilPocket menyalin data pocket yang dipilih dari variabel aslinya (nama1, nama2, dan seterusnya).
+// Data tersebut dipindahkan ke variabel perantara agar lebih mudah diolah.
+// case p of memilih bagian yang sesuai dengan nilai p. Contohnya, p = 1 memakai data pocket 1, sedangkan p = 2 memakai data pocket 2.
 procedure ambilPocket;
 begin
   case p of
@@ -31,6 +45,9 @@ begin
   end;
 end;
 
+// simpanPocket melakukan kebalikan dari ambilPocket.
+// Prosedur ini mengembalikan data dari variabel perantara ke variabel pocket yang dipilih.
+// Panggil prosedur ini setelah data diubah agar perubahan tersebut tersimpan.
 procedure simpanPocket;
 begin
   case p of
@@ -45,17 +62,21 @@ begin
   end;
 end;
 
-{simpan & baca file}
+{Menyimpan dan membaca data dari file}
+
+// simpanData menyimpan seluruh data ke marie.txt agar data tetap ada saat program ditutup.
+// Urutan data yang ditulis harus sama dengan urutan saat data dibaca oleh bacaData.
 procedure simpanData;
 var
-  f: text;
+  f: text; // Variabel ini digunakan untuk mengakses file teks.
   k: integer;
 Begin
-  assign(f, 'marie.txt');
-  rewrite(f);
+  assign(f, 'marie.txt'); // Menghubungkan variabel f ke file marie.txt.
+  rewrite(f);             // Membuka file untuk ditulis; isi sebelumnya akan diganti.
   writeln(f, username);
   writeln(f, sandi);
   writeln(f, jumlahPocket);
+  // Nilai boolean disimpan sebagai angka: 1 untuk true dan 0 untuk false.
   if templateAda = true then
     writeln(f, 1)
   else
@@ -64,6 +85,7 @@ Begin
   writeln(f, totalMasuk);
   writeln(f, totalKeluar);
   writeln(f, jumlahTransaksi);
+  // Setiap pocket ditulis dalam tiga baris: nama, saldo, lalu persentase.
   for k := 1 to jumlahPocket do
   begin
     p := k;
@@ -72,20 +94,23 @@ Begin
     writeln(f, saldoSkrg);
     writeln(f, persenSkrg);
   end;
-  close(f);
+  close(f); // File perlu ditutup agar proses penyimpanan selesai dengan benar.
 End;
 
+// bacaData membaca isi marie.txt dengan urutan yang sama seperti saat data disimpan.
+// readln(f, ...) mengambil satu baris dari file lalu memasukkannya ke variabel.
 procedure bacaData;
 var
     f: text;
-    k, t: integer;
+    k, t: integer; // t menampung angka 1 atau 0 yang mewakili nilai templateAda.
 begin
     assign(f, 'marie.txt');
-    reset(f);
+    reset(f); // buka file untuk dibaca
     readln(f, username);
     readln(f, sandi);
     readln(f, jumlahPocket);
     readln(f, t);
+    // Mengubah angka 1 atau 0 kembali menjadi nilai boolean.
     if t = 1 then
         templateAda := true
     else
@@ -94,6 +119,7 @@ begin
     readln(f, totalMasuk);
     readln(f, totalKeluar);
     readln(f, jumlahTransaksi);
+    // Membaca data setiap pocket, lalu menyimpannya ke variabel aslinya dengan simpanPocket.
     for k := 1 to jumlahPocket do
     begin
         p := k;
@@ -111,7 +137,7 @@ var
 begin
     berhasil := false;
     percobaan := 0;
-    repeat
+    repeat // Perulangan akan terus berjalan sampai kondisi pada until terpenuhi.
         clrscr;
         writeln('==========================================================');
         writeln('                __  __    _    ____  ___ _____ ');
@@ -132,20 +158,22 @@ begin
             writeln('  Username dan sandi harus diisi');
             write('  Tekan enter untuk coba lagi...');
             readln;
-            continue;
+            continue; // Kembali ke awal perulangan tanpa menambah jumlah percobaan.
         end;
         if (u = username) and (s = sandi) then
         begin
             berhasil := true;
-            break;
+            break; // Keluar dari perulangan repeat karena login berhasil.
         end;
         percobaan := percobaan + 1;
         writeln('  Username atau sandi salah, sisa ', 3 - percobaan, ' kali lagi');
         write('  Tekan enter...');
         readln;
-    until percobaan = 3;
+    until percobaan = 3; // Perulangan berhenti setelah tiga kali percobaan yang salah.
 end;
 
+// lihatPocket menampilkan semua pocket yang sudah dibuat.
+// Perulangan memeriksa setiap pocket, lalu mengambil data pocket yang sedang diproses.
 procedure lihatPocket;
 var
   k: integer;
@@ -155,8 +183,8 @@ begin
     writeln('Belum ada pocket');
   for k := 1 to jumlahPocket do
   begin
-    p := k;
-    ambilPocket;
+    p := k;          // Memilih pocket yang sedang diproses.
+    ambilPocket;     // Menyalin data pocket ke variabel perantara.
     if templateAda = true then
       writeln(k, '. ', namaSkrg, ' - Rp ', saldoSkrg, ' (', persenSkrg, '%)')
     else
@@ -164,6 +192,7 @@ begin
   end;
 end;
 
+// ringkasan menghitung total saldo dari saldo di luar pocket ditambah saldo seluruh pocket.
 procedure ringkasan;
 var
   k : integer;
@@ -175,7 +204,7 @@ begin
   begin
     p := k;
     ambilPocket;
-    total := total + saldoSkrg;
+    total := total + saldoSkrg; // Menambahkan saldo pocket yang sedang diproses ke total.
   end;
   lihatPocket;
   writeln;
@@ -186,6 +215,9 @@ begin
   writeln('Jumlah transaksi    : ', jumlahTransaksi);
 end;
 
+// aturPersen meminta pengguna menentukan persentase pembagian pemasukan untuk setiap pocket.
+// Pengisian diulang jika jumlah persentasenya melebihi 100%.
+// Persentase yang tersisa dari 100% akan dialokasikan ke saldoBebas.
 procedure aturPersen;
 var
   k, total: integer;
@@ -193,7 +225,7 @@ begin
   clrscr;
   writeln('==== ATUR TEMPLATE PERSEN ====');
   repeat
-    total := 0;
+    total := 0; // Total dihitung ulang dari nol setiap kali proses diulang.
     writeln('Masukkan persen untuk tiap pocket (total maksimal 100)');
     for k := 1 to jumlahPocket do
     begin
@@ -201,9 +233,9 @@ begin
       ambilPocket;
       write(namaSkrg, ' : ');
       readln(persenSkrg);
-      if persenSkrg < 0 then
+      if persenSkrg < 0 then // Persentase negatif diubah menjadi nol.
         persenSkrg := 0;
-      simpanPocket;
+      simpanPocket; // Menyimpan persentase yang sudah dimasukkan ke pocket.
       total := total + persenSkrg;
     end;
     if total > 100 then
@@ -213,6 +245,8 @@ begin
   writeln('Template disimpan, sisa ', 100 - total, '% masuk ke saldo diluar pocket');
 end;
 
+// resetTemplate: mengosongkan persen semua pocket.
+// Prosedur ini digunakan saat jumlah pocket berubah, karena pengaturan persentase sebelumnya perlu dihapus.
 procedure resetTemplate;
 var
   k: integer;
@@ -227,6 +261,7 @@ begin
   templateAda := false;
 end;
 
+// buatPocket dijalankan ketika pengguna belum memiliki pocket.
 procedure buatPocket;
 var
   n, k: integer;
@@ -234,6 +269,7 @@ begin
   clrscr;
   writeln('--- BUAT POCKET ---');
   writeln('Kamu belum punya pocket, buat dulu');
+  // Minta pengguna mengisi ulang sampai jumlah pocket berada di antara 1 dan 8.
   repeat
     write('Mau buat berapa pocket? (1-8) : ');
     readln(n);
@@ -245,13 +281,14 @@ begin
   for k := 1 to jumlahPocket do
   begin
     p := k;
+    // Minta nama diisi sampai tidak kosong.
     repeat
       write('Nama pocket ke-', k, ' : ');
       readln(namaSkrg);
       if namaSkrg = '' then
         writeln('Nama tidak boleh kosong');
     until namaSkrg <> '';
-    saldoSkrg := 0;
+    saldoSkrg := 0;   // Saldo pocket baru dimulai dari nol.
     persenSkrg := 0;
     simpanPocket;
   end;
@@ -260,6 +297,8 @@ begin
   writeln;
 end;
 
+// pemasukan mencatat uang yang diterima dan mengalokasikannya ke pocket.
+// sisa menyimpan uang yang belum dialokasikan. Pada akhirnya, jumlah ini masuk ke saldoBebas.
 procedure pemasukan;
 var
     k, pil: integer;
@@ -271,12 +310,15 @@ begin
     if nominal <= 0 then
     begin
         writeln('nominalnya harus lebih dari 0 ya');
-        exit;
+        exit; // Menghentikan prosedur pemasukan jika nominal tidak valid.
     end;
 
     totalMasuk := totalMasuk + nominal;
     jumlahTransaksi := jumlahTransaksi + 1;
 
+    // Jika template sudah diatur, tampilkan perkiraan pembagian uang berdasarkan persentase tersebut.
+    // nominal div 100 * persen berarti nominal dibagi 100 dengan hasil bilangan bulat,
+    // kemudian dikalikan persentase. Contoh: 500000 div 100 * 20 menghasilkan 100000.
     if templateAda = true then
     begin
         writeln('Template pembagian kamu :');
@@ -294,29 +336,32 @@ begin
     write('Pilih : ');
     readln(pil);
 
+    // Jika pengguna memilih menggunakan pocket tetapi belum memilikinya, buat pocket terlebih dahulu.
     if ((pil = 1) or (pil = 2)) and (jumlahPocket = 0) then
         buatPocket;
 
-    sisa := nominal;
+    sisa := nominal; // Pada awal proses, seluruh uang dianggap belum dialokasikan.
     case pil of
         1: begin
+                  // Pilihan 1 membagi uang secara otomatis mengikuti persentase template.
                   if templateAda = false then
                       aturPersen;
                   for k := 1 to jumlahPocket do
                   begin
                       p := k;
                       ambilPocket;
-                      bagian := nominal div 100 * persenSkrg;
-                      saldoSkrg := saldoSkrg + bagian;
+                      bagian := nominal div 100 * persenSkrg; // Menghitung bagian untuk pocket yang sedang diproses.
+                      saldoSkrg := saldoSkrg + bagian;        // Menambahkan bagian uang ke saldo pocket.
                       simpanPocket;
-                      sisa := sisa - bagian;
+                      sisa := sisa - bagian;                  // Mengurangi jumlah uang yang belum dialokasikan.
                   end;
               end;
         2: begin
+                  // Pilihan 2 memungkinkan pengguna menentukan nominal untuk setiap pocket sendiri.
                   for k := 1 to jumlahPocket do
                   begin
                       if sisa = 0 then
-                          break;
+                          break; // Tidak ada uang tersisa untuk dibagikan, jadi perulangan dihentikan.
                       p := k;
                       ambilPocket;
                       write(namaSkrg, ' (sisa Rp ', sisa, ') : Rp ');
@@ -324,7 +369,7 @@ begin
                       if (bagian < 0) or (bagian > sisa) then
                       begin
                           writeln('Nominal tidak valid, pocket ini dilewati');
-                          continue;
+                          continue; // Lewati pocket ini dan lanjutkan ke pocket berikutnya.
                       end;
                       saldoSkrg := saldoSkrg + bagian;
                       simpanPocket;
@@ -336,7 +381,7 @@ begin
         writeln('Pilihan salah, uang masuk ke saldo diluar pocket');
     end;
 
-    saldoBebas := saldoBebas + sisa;
+    saldoBebas := saldoBebas + sisa; // uang yang tidak terbagi masuk saldo di luar pocket
     writeln;
     writeln('Pemasukan sudah masuk');
     write('Tekan enter untuk melihat ringkasan...');
@@ -345,6 +390,7 @@ begin
     ringkasan;
 end;
 
+// pengeluaran menggunakan sumber 0 untuk saldo di luar pocket, atau nomor 1 sampai 8 untuk pocket tertentu.
 procedure pengeluaran;
 var
   sumber: integer;
@@ -370,6 +416,7 @@ begin
 
   if sumber = 0 then
   begin
+    // Mengurangi uang dari saldo di luar pocket.
     if nominal > saldoBebas then
     begin
       Writeln('saldo ga cukup');
@@ -379,6 +426,7 @@ begin
   end
   else
   begin
+    // Mengurangi uang dari pocket yang dipilih pengguna.
     p := sumber;
     ambilPocket;
     if nominal > saldoSkrg then
@@ -387,9 +435,10 @@ begin
       exit;
     end;
     saldoSkrg := saldoSkrg - nominal;
-    simpanPocket;
+    simpanPocket; // Simpan kembali saldo setelah dikurangi.
   end;
 
+  // Bagian ini dijalankan hanya jika semua pemeriksaan berhasil dilewati.
   totalKeluar := totalKeluar + nominal;
   jumlahTransaksi := jumlahTransaksi + 1;
   Writeln('pengeluaran sudah dicatat');
@@ -418,6 +467,7 @@ begin
 
     case pil of
       1: begin
+           // Pocket baru akan ditambahkan di posisi paling akhir.
            if jumlahPocket = MAXPOCKET then
              writeln('Pocket sudah penuh, maksimal ', MAXPOCKET, ' pocket')
            else
@@ -425,14 +475,14 @@ begin
              jumlahPocket := jumlahPocket + 1;
              if templateAda = true then
              begin
-               resetTemplate;
+               resetTemplate; // Jika jumlah pocket berubah, pengaturan persentase sebelumnya perlu direset.
                writeln('Jumlah pocket berubah, template direset');
              end;
-             p := jumlahPocket;
+             p := jumlahPocket; // Pocket yang baru dibuat menggunakan nomor terakhir.
              write('Nama pocket : ');
              readln(namaSkrg);
              if namaSkrg = '' then
-               namaSkrg := 'Pocket Baru';
+               namaSkrg := 'Pocket Baru'; // Gunakan nama bawaan jika pengguna tidak mengisi nama.
              saldoSkrg := 0;
              persenSkrg := 0;
              simpanPocket;
@@ -473,9 +523,15 @@ begin
              writeln('nomor pocketnya ga ada')
            else
            begin
+             // 1) pindahkan saldo pocket yang dihapus ke saldo di luar pocket
              p := no;
              ambilPocket;
              saldoBebas := saldoBebas + saldoSkrg;
+
+             // 2) geser semua pocket setelahnya satu posisi ke depan untuk menutup "lubang".
+             // Contoh: hapus pocket 2 -> isi pocket 3 disalin ke 2, isi 4 disalin ke 3, dst.
+             // p := k + 1 -> ambil data pocket di depannya
+             // p := k     -> simpan data itu ke posisi k
              for k := no to jumlahPocket - 1 do
              begin
                p := k + 1;
@@ -483,6 +539,8 @@ begin
                p := k;
                simpanPocket;
              end;
+
+             // 3) kurangi jumlah pocket (pocket paling belakang jadi tidak dipakai lagi)
              jumlahPocket := jumlahPocket - 1;
              if templateAda = true then
              begin
@@ -509,7 +567,7 @@ begin
   Writeln('--- Ganti Sandi ---');
   Write('Sandi lama : ');
   Readln(lama);
-  if lama <> sandi then
+  if lama <> sandi then // Operator "<>" berarti "tidak sama dengan".
   begin
     Writeln('sandi lama salah!');
     exit;
@@ -530,6 +588,8 @@ begin
   end;
 end;
 
+// resetData menghapus seluruh data keuangan dan meminta dua konfirmasi terlebih dahulu
+// berupa sandi dan pengetikan kata RESET agar data tidak terhapus secara tidak sengaja.
 procedure resetData;
 var
   s, yakin: string;
@@ -554,6 +614,7 @@ begin
     exit;
   end;
 
+  // Kosongkan seluruh delapan slot pocket, termasuk slot yang sedang tidak digunakan.
   for i := 1 to MAXPOCKET do
   begin
     p := i;
@@ -573,7 +634,8 @@ begin
 end;
 
 
-{saran-saran}
+{Kumpulan saran keuangan}
+// Prosedur-prosedur berikut berisi saran yang ditampilkan ke layar dan tidak menjalankan perhitungan yang rumit.
 procedure saranPembagian;
 begin
   writeln('==== CARA MEMBAGI UANG ====');
@@ -588,6 +650,7 @@ begin
   writeln('   30% cicilan atau utang (paling banyak)');
   writeln('   20% tabungan dan investasi');
   writeln('   10% sosial, zakat, sedekah, keluarga');
+  // Bagian ini ditampilkan hanya jika sudah ada pemasukan yang tercatat.
   if totalMasuk > 0 then
   begin
     writeln;
@@ -638,6 +701,8 @@ begin
   writeln('   sedikit ruang untuk menabung. Atur porsi makan.');
 end;
 
+// saranDanaDarurat menampilkan saran sekaligus menghitung target dana darurat
+// sebesar tiga kali pengeluaran bulanan, lalu membandingkannya dengan total saldo saat ini.
 procedure saranDanaDarurat;
 var
   bulanan, total: longint;
@@ -656,6 +721,7 @@ begin
   readln(bulanan);
   if bulanan > 0 then
   begin
+    // Hitung total saldo dengan menjumlahkan saldo di luar pocket dan saldo semua pocket.
     total := saldoBebas;
     for k := 1 to jumlahPocket do
     begin
@@ -715,10 +781,11 @@ begin
   writeln('   reksa dana pasar uang, atau emas.');
 end;
 
+// analisis menghitung persentase pemasukan yang sudah digunakan dan menampilkan kondisi keuangan berdasarkan sisa uang.
 procedure analisis;
 var
     pil: integer;
-    keluar, simpan: real;
+    keluar, simpan: real; // Tipe real digunakan untuk menyimpan angka desimal.
 begin
     repeat
         clrscr;
@@ -729,8 +796,11 @@ begin
             writeln('  Belum ada pemasukan, catat dulu pemasukan kamu')
         else
         begin
-            keluar := totalKeluar / totalMasuk * 100;
-            simpan := 100 - keluar;
+            // Operator "/" menghasilkan angka desimal, sedangkan "div" menghasilkan pembagian bilangan bulat.
+            keluar := totalKeluar / totalMasuk * 100; // Persentase pemasukan yang sudah digunakan untuk pengeluaran.
+            simpan := 100 - keluar;                   // Persentase pemasukan yang masih tersisa.
+            // Format keluar:0:1 menampilkan angka dengan satu digit di belakang koma.
+            // Angka 0 membuat lebar tampilan menyesuaikan, sedangkan 1 berarti satu digit desimal.
             writeln('  Pengeluaran : ', keluar:0:1, '% dari pemasukan');
             writeln('  Sisa        : ', simpan:0:1, '% dari pemasukan');
             if simpan >= 20 then
@@ -773,11 +843,16 @@ begin
     until pil = 0;
 end;
 
+// ===== BAGIAN UTAMA PROGRAM =====
+// Program mulai dijalankan dari bagian ini.
+// Alur program: menyiapkan nilai awal, membaca data dari file, meminta login, lalu menampilkan menu utama.
 begin
     clrscr;
+    // Nilai awal akun digunakan jika file marie.txt belum tersedia.
     username := 'admin';
     sandi := '1234';
 
+    // Pastikan seluruh delapan slot pocket kosong saat program pertama kali dijalankan.
     for i := 1 to MAXPOCKET do
     begin
         p := i;
@@ -793,6 +868,8 @@ begin
     totalKeluar := 0;
     jumlahTransaksi := 0;
 
+    // Jika marie.txt sudah ada dari penggunaan sebelumnya, baca data yang tersimpan di dalamnya.
+    // Data dari file akan menggantikan nilai awal yang sudah disiapkan.
     if FileExists('marie.txt') then
         bacaData;
 
@@ -800,9 +877,13 @@ begin
 
   login;
     if berhasil = false then
-        writeln('AKUN TERKUNCI, coba lagi nanti')
+    begin
+        writeln('AKUN TERKUNCI, coba lagi nanti');
+        readln;
+    end
     else
     begin
+        // Menu utama terus ditampilkan sampai pengguna memilih 0 untuk keluar.
         repeat
             clrscr;
             writeln('+==========================================================+');
@@ -833,7 +914,7 @@ begin
             else
                 writeln('menu tidak tersedia!!');
             end;
-            simpanData;
+            simpanData; // Simpan data ke file setiap kali satu aksi selesai.
             if menu <> 0 then
             begin
                 writeln;
