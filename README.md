@@ -164,25 +164,6 @@ Semua data disimpan ke file `marie.txt`, jadi data tidak hilang walaupun program
 
 ---
 
-## 🔄 Alur Program
-
-```mermaid
-flowchart TD
-    A([Mulai]) --> B{marie.txt ada?}
-    B -- Ya --> C[Baca data dari file]
-    B -- Tidak --> D[Pakai data awal]
-    C --> E[Login]
-    D --> E
-    E -- Salah 3x --> F([Akun terkunci])
-    E -- Berhasil --> G[Menu Utama]
-    G --> H[Pilih menu 1-7]
-    H --> I[Simpan data ke file]
-    I --> G
-    G -- Pilih 0 --> J([Selesai])
-```
-
----
-
 ## 🚀 Panduan Penggunaan
 
 ### 🧰 Kebutuhan
