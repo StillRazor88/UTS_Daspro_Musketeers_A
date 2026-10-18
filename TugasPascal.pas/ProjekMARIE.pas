@@ -120,7 +120,7 @@ begin
         writeln('               | |  | |/ ___ \|  _ < | || |___ ');
         writeln('               |_|  |_/_/   \_\_| \_\___|_____|');
         writeln;
-        writeln(' Money Allocation, Regulation, Intelligence & Evaluation');
+        writeln('    Money Allocation, Regulation, Insight & Evaluation');
         writeln('==========================================================');
         writeln('                         LOGIN');
         write('  Username : ');
@@ -807,7 +807,7 @@ begin
             clrscr;
             writeln('+==========================================================+');
             writeln('|                        M A R I E                         |');
-            writeln('| Money Allocation, Regulation, Intelligence & Evaluation  |');
+            writeln('|    Money Allocation, Regulation, Insight & Evaluation    |');
             writeln('+==========================================================+');
             writeln('|  1. Ringkasan Rekening                                   |');
             writeln('|  2. Input Pemasukan                                      |');
